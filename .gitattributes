@@ -1,0 +1,5 @@
+*.html linguist-language=HTML
+*.xml linguist-language=XProc
+*.bes linguist-language=XProc
+*.ojo linguist-language=XProc
+*.beswrpt linguist-language=HTML
