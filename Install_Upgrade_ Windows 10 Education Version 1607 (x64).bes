@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BES xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="BES.xsd">
+	<Task>
+		<Title>Install/Upgrade: Windows 10 Education Version 1607 (x64)</Title>
+		<Description><![CDATA[<P><STRONG>Windows 10 Education</STRONG> is available just for education customers in volume licensing programs. Windows 10 Education includes features from Windows 10 Enterprise that are ideal for advanced security, and the comprehensive device control and management needs of today's education institution. Windows 10 Education also enables simplified deployment in the education space; this edition provides a direct path for many devices to upgrade from Windows 10 Home or Windows 10 Pro.</P>
+<P>Windows 10 Education, version 1607 (Updated Jul '16) is the latest version of Windows 10 Education. It includes all updates released for Windows 10 Education since 1511 (Released Apr '16) including security and non-security updates.</P>
+<P><STRONG>The SysMan Team as well as several Penn State enterprise services recommend Windows 10 Education over any other edition of Windows 10.</STRONG></P>
+<P>This task only upgrades 64-bit Windows operating systems.&nbsp;To upgrade&nbsp;32-bit systems, use the 32-bit version of this task.</P>
+<P>The upgrade process comprises 2 phases: </P>
+<OL>
+<LI>Silent, unattended background phase 
+<LI>Unattended Windows Setup phase</LI></OL>
+<P>This task keeps the system awake to complete the download and the Phase 1 setup process (not visible to the end user), after which the system restarts (if no user is logged on)&nbsp;to enter Phase 2 (visible to the end user, and may include several additional restarts).&nbsp;</P>
+<P>When Windows Setup completes, the system attempts to activate against Penn State's KMS if needed; however, this part may fail because, well,&nbsp;sometimes BigFix can be a BigBitch<FONT color=#222222 face=Arial>™ and&nbsp;the answer is to take a separate action of "Configuration: Activate with mskms.psu.edu - Windows" if it happens to be relevant rather than to troubleshoot complex timing issues for what would otherwise be a really awesome self-contained action.</FONT></P>
+<P>Upon logging in for the first time after the upgrade, Windows Welcome will complete the setup process.</P>
+<P><STRONG>The entire setup process may take several hours to complete; please schedule upgrades when such a service interruption is acceptable.</STRONG></P>
+<P><STRONG><FONT color=#ff0000>Important Notes:</FONT></STRONG></P>
+<UL>
+<LI>This task <EM><STRONG>upgrades the&nbsp;mother-hugging operating system</STRONG>!</EM> For the love of Bill Gates and the sake of all that is or isn't good and/or holy, make sure your users' data is backed up, in The Cloud, burned&nbsp;to a CD, or printed out and stacked on the desk (preferably before deployment). 
+<LI>Surely you have tested this task before deploying to your Chancellor or Dean. Surely, Shirley! 
+<LI>This task upgrades any previous version of Windows, including 7, 8, 8.1, and 10; this task also converts other current or old editions of Windows 10 (i.e., Home, Professional, Enterprise) to the current edition of Windows 10 Education. How do you like them Apple(s)? 
+<LI>This task is designed to run when no user is logged on and will wait for users to log off before running. By that time that happens, you may want to stop this action and look for our Windows 11 tasks. 
+<LI>User data is migrated; however, certain settings (e.g., desktop wallpaper) are handled differently and may not complete the long journey, especially when migrating from older operating systems (e.g., Windows 7 to Windows 10). That cat picture wallpaper was pretty old, anyway; pick a new, incredible one in HD at <A href="http://www.bandofcats.com/a-cascade-of-incredible-cat-wallpapers-for-your-desktop-part-1/">http://www.bandofcats.com/a-cascade-of-incredible-cat-wallpapers-for-your-desktop-part-1/</A>. 
+<LI>If the task fails or does not complete, sorry. Also, (somewhat unhelpful, but comforting-to-have) logs are located in C:\Program Files (x86)\BigFix Enterprise\BES Client\__BESData\__Global\Logs\win10_1607_upgrade</LI></UL>]]></Description>
+		<Relevance>windows of operating system</Relevance>
+		<Relevance>x64 of operating system</Relevance>
+		<Relevance>(it does not start with "Win20") of name of operating system</Relevance>
+		<Relevance><![CDATA[(it < "10.0.14393") of version of operating system]]></Relevance>
+		<Relevance>not exists value "EditionID" whose (it as string as lowercase = "Education" as lowercase) of key "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion" of native registry</Relevance>
+		<Relevance><![CDATA[free space of drive of system folder / (1024*1024*1024) >= 8]]></Relevance>
+		<Relevance>not pending restart "eee7c0e49c71533883b205dcae0c82c75cd4b4ad"</Relevance>
+		<Category>OS</Category>
+		<DownloadSize>3906924544</DownloadSize>
+		<Source>https://github.com/jbtyndall</Source>
+		<SourceID>jbtyndall</SourceID>
+		<SourceReleaseDate>2016-12-01</SourceReleaseDate>
+		<SourceSeverity></SourceSeverity>
+		<CVENames></CVENames>
+		<SANSID></SANSID>
+		<MIMEField>
+			<Name>x-fixlet-modification-time</Name>
+			<Value>Thu, 19 Jan 2017 12:12:56 +0000</Value>
+		</MIMEField>
+		<Domain>BESC</Domain>
+		<DefaultAction ID="Action1">
+			<Description>
+				<PreLink></PreLink>
+				<Link>Install/upgrade</Link>
+				<PostLink><![CDATA[&nbsp;Windows 10 Education x64]]></PostLink>
+			</Description>
+			<ActionScript MIMEType="application/x-Fixlet-Windows-Shell"><![CDATA[begin prefetch block	
+add prefetch item name =en_windows_10_education_version_1607_updated_jul_2016_x64_dvd_9055880.iso sha1=eee7c0e49c71533883b205dcae0c82c75cd4b4ad size=3906924544 url={value of setting "_BESClient_AllowCustomRepoDownloads" of client   | "http://MANUAL_BES_CACHING_REQUIRED/"}en_windows_10_education_version_1607_updated_jul_2016_x64_dvd_9055880.iso sha256=482d27f1051fb7c88b625d918464eeaf481c20e241062d9010b0212b5d4c133d
+end prefetch block
+
+action parameter query "KMS" with description "KMS server:" with default "kms.tyndallsoft.com"
+
+parameter "WorkingDir" = "{(value of variable "SystemDrive" of environment) & "\win10_upgrade_temp"}"
+folder delete "{parameter "WorkingDir"}"
+folder create "{parameter "WorkingDir"}"
+
+delete __createfile
+createfile until SETUPCOMPLETECMD
+@echo off
+rmdir /s /q "{parameter "WorkingDir"}"
+SETUPCOMPLETECMD
+delete setupcomplete.cmd
+move __createfile setupcomplete.cmd
+
+extract eee7c0e49c71533883b205dcae0c82c75cd4b4ad "{parameter "WorkingDir"}"
+
+//debug
+// waithidden "{parameter "WorkingDir"}\setup.exe" /auto upgrade /quiet /migratedrivers all /dynamicupdate enable /compat scanonly
+
+parameter "LogDir" = "{(pathname of folder "__BESData\__Global\Logs" of parent folder of client) & "\win10_1607_upgrade"}"
+waithidden cmd /c rmdir /s /q "{parameter "LogDir"}"
+waithidden cmd /c mkdir "{parameter "LogDir"}"
+
+// yipee ki-yay, motherboard
+waithidden "{parameter "WorkingDir"}\setup.exe" /auto upgrade /quiet /migratedrivers all /dynamicupdate enable /pkey NW6C2-QMPVW-D7KKK-3GKT6-VCFB2 /copylogs "{parameter "LogDir"}" /postoobe "{pathname of client folder of current site & "\setupcomplete.cmd"}"
+
+if {number of logged on users = 0}
+	restart 0
+else
+	action requires restart "eee7c0e49c71533883b205dcae0c82c75cd4b4ad"
+endif
+
+//attempt activation (for non-VL editions)
+if {1 != integer value of selects "LicenseStatus from SoftwareLicensingProduct WHERE PartialProductKey is not null" of wmi}
+	action uses wow64 redirection false
+	set clock
+	waithidden "{(pathname of system folder)}\cscript.exe" "{(pathname of system folder)}\slmgr.vbs" /skms "{parameter "KMS"}"
+	waithidden "{(pathname of system folder)}\cscript.exe" "{(pathname of system folder)}\slmgr.vbs" /ato
+endif
+]]></ActionScript>
+			<SuccessCriteria Option="CustomRelevance"><![CDATA[(it < "10.0.14393") of version of operating system and not pending restart "eee7c0e49c71533883b205dcae0c82c75cd4b4ad"]]></SuccessCriteria>
+			<Settings>
+				<PreActionShowUI>false</PreActionShowUI>
+				<HasRunningMessage>false</HasRunningMessage>
+				<HasTimeRange>false</HasTimeRange>
+				<HasStartTime>false</HasStartTime>
+				<HasEndTime>true</HasEndTime>
+				<EndDateTimeLocalOffset>P2D</EndDateTimeLocalOffset>
+				<HasDayOfWeekConstraint>false</HasDayOfWeekConstraint>
+				<UseUTCTime>false</UseUTCTime>
+				<ActiveUserRequirement>RequireNoUser</ActiveUserRequirement>
+				<ActiveUserType>AllUsers</ActiveUserType>
+				<HasWhose>false</HasWhose>
+				<PreActionCacheDownload>false</PreActionCacheDownload>
+				<Reapply>false</Reapply>
+				<HasReapplyLimit>true</HasReapplyLimit>
+				<ReapplyLimit>3</ReapplyLimit>
+				<HasReapplyInterval>false</HasReapplyInterval>
+				<HasRetry>false</HasRetry>
+				<HasTemporalDistribution>false</HasTemporalDistribution>
+				<ContinueOnErrors>true</ContinueOnErrors>
+				<PostActionBehavior Behavior="Nothing"></PostActionBehavior>
+				<IsOffer>false</IsOffer>
+			</Settings>
+			<SettingsLocks>
+				<ActionUITitle>false</ActionUITitle>
+				<PreActionShowUI>false</PreActionShowUI>
+				<PreAction>
+					<Text>false</Text>
+					<AskToSaveWork>false</AskToSaveWork>
+					<ShowActionButton>false</ShowActionButton>
+					<ShowCancelButton>false</ShowCancelButton>
+					<DeadlineBehavior>false</DeadlineBehavior>
+					<ShowConfirmation>false</ShowConfirmation>
+				</PreAction>
+				<HasRunningMessage>false</HasRunningMessage>
+				<RunningMessage>
+					<Text>false</Text>
+				</RunningMessage>
+				<TimeRange>false</TimeRange>
+				<StartDateTimeOffset>false</StartDateTimeOffset>
+				<EndDateTimeOffset>false</EndDateTimeOffset>
+				<DayOfWeekConstraint>false</DayOfWeekConstraint>
+				<ActiveUserRequirement>true</ActiveUserRequirement>
+				<ActiveUserType>false</ActiveUserType>
+				<Whose>false</Whose>
+				<PreActionCacheDownload>false</PreActionCacheDownload>
+				<Reapply>false</Reapply>
+				<ReapplyLimit>false</ReapplyLimit>
+				<RetryCount>false</RetryCount>
+				<RetryWait>false</RetryWait>
+				<TemporalDistribution>false</TemporalDistribution>
+				<ContinueOnErrors>false</ContinueOnErrors>
+				<PostActionBehavior>
+					<Behavior>false</Behavior>
+					<AllowCancel>false</AllowCancel>
+					<Deadline>false</Deadline>
+					<Title>false</Title>
+					<Text>false</Text>
+				</PostActionBehavior>
+				<IsOffer>false</IsOffer>
+				<AnnounceOffer>false</AnnounceOffer>
+				<OfferCategory>false</OfferCategory>
+				<OfferDescriptionHTML>false</OfferDescriptionHTML>
+			</SettingsLocks>
+		</DefaultAction>
+	</Task>
+</BES>
