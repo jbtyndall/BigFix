@@ -27,5 +27,35 @@ To create a [prefetch](https://developer.bigfix.com/action-script/reference/down
 ```powershell
 New-Prefetch http://i.imgur.com/YAUeUOG.jpg
 ```
+This creates the following command:
 
-### Parameters
+```
+prefetch YAUeUOG.jpg sha1:ce842e0af799f2ba476511c8fbfdc3bf89612dd0 size:57656 http://i.imgur.com/YAUeUOG.jpg sha256:74f69205a016a3896290eae03627e15e8dfeba812a631b5e0afca140722a322b
+```
+### Optional: Specifying a Different Name
+
+To download the file as `hodor.jpg`:
+
+```powershell
+New-Prefetch http://i.imgur.com/YAUeUOG.jpg -Name hodor.jpg
+```
+
+This creates the following command:
+
+```
+prefetch hodor.jpg sha1:ce842e0af799f2ba476511c8fbfdc3bf89612dd0 size:57656 http://i.imgur.com/YAUeUOG.jpg sha256:74f69205a016a3896290eae03627e15e8dfeba812a631b5e0afca140722a322b
+```
+
+### Optional: Add to Prefetch Block
+
+To download:
+
+```powershell
+New-Prefetch http://i.imgur.com/YAUeUOG.jpg -Name hodor.jpg -IsPrefetchItem
+```
+
+This creates the following command:
+
+```
+add prefetch item name=hodor.jpg size=57656 sha1=ce842e0af799f2ba476511c8fbfdc3bf89612dd0 url=http://i.imgur.com/YAUeUOG.jpg sha256=74f69205a016a3896290eae03627e15e8dfeba812a631b5e0afca140722a322b
+```
